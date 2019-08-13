@@ -35,7 +35,32 @@ public class DeduplicatorProcessor extends AbstractProcessor {
     public void onTrigger(ProcessContext context, ProcessSession session) throws ProcessException {
         //implement your code here
         FlowFile flowfile = session.get();
-
+/*
+        dead duplicates
+        
+        вход: строка с разделителями
+        
+        инвариант:
+        > разделитель \n
+        > сплит не содержит разделитель
+        > все объекты в кэше уникальны
+        
+        контракт:
+        > пустая строка означает отсутствие данных на входе (в сплите)
+        
+        последовательность действий:
+        создать буфер
+        цикл (получить сплиты, получить первый/следующий сплит, продолжать, пока есть следующий):
+            тест
+                сплит пуст ?
+                    да: тест завершен
+                    нет:
+                        insert! в кэш (побочный эффект - модификация кэша)
+                        insert! удался ?
+                            да: записать сплит в буфер
+        буфер не пуст ?
+            да: записать буфер в ff
+        */
         session.transfer(flowfile, SUCCESS);
     }
 }
